@@ -40,6 +40,11 @@ export const RightSide = styled.div`
   }
 
   #notification {
+    background: none;
+    border: none;
+    outline: none;
+    cursor: pointer;
+
     img {
       width: 25px;
       height: 25px;
@@ -52,6 +57,9 @@ export const RightSide = styled.div`
       position: relative;
       top: -20px;
       right: 10px;
+    }
+    &:hover {
+      opacity: 0.7;
     }
   }
   .dividir::after {
