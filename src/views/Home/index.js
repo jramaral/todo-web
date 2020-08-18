@@ -13,7 +13,6 @@ import TaskCard from "./../../components/TaskCard/index";
 export default function Home() {
   const [filterActived, setFilterActived] = useState("all");
   const [tasks, setTasks] = useState([]);
-  const [lateCount, setLateCount] = useState();
 
   async function loadTasks() {
     await api
@@ -25,24 +24,17 @@ export default function Home() {
       });
   }
 
-  async function lateVerify() {
-    await api.get(`/task/filter/late/11:11:11:11:11:11`).then((response) => {
-      setLateCount(response.data.length);
-    });
-  }
-
   const Notification = () => {
     setFilterActived("late");
   };
 
   useEffect(() => {
     loadTasks();
-    lateVerify();
   }, [filterActived]);
 
   return (
     <S.Container>
-      <Header lateCount={lateCount} clickNotification={Notification} />
+      <Header clickNotification={Notification} />
       <S.FilterArea>
         <button type="button" onClick={() => setFilterActived("all")}>
           <FilterCard title="Todos" actived={filterActived === "all"} />

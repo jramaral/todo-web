@@ -16,7 +16,6 @@ import iconClock from "../../assets/time.png";
 import iconCalendar from "../../assets/calendart.png";
 
 export default function Task({ match }) {
-  const [lateCount, setLateCount] = useState();
   const [type, setType] = useState();
   const [id, setId] = useState();
   const [done, setDone] = useState(false);
@@ -26,12 +25,6 @@ export default function Task({ match }) {
   const [hour, setHour] = useState();
   const [macaddress, setMacaddress] = useState("11:11:11:11:11:11");
   const [redirect, setRedirect] = useState(false);
-
-  async function lateVerify() {
-    await api.get(`/task/filter/late/11:11:11:11:11:11`).then((response) => {
-      setLateCount(response.data.length);
-    });
-  }
 
   async function remove() {
     await api.delete(`/task/${match.params.id}`).then((r) => {
@@ -92,13 +85,12 @@ export default function Task({ match }) {
     }
   };
   useEffect(() => {
-    lateVerify();
     LoadTaskDetails();
   }, []);
   return (
     <S.Container>
       {redirect && <Redirect to="/" />}
-      <Header lateCount={lateCount} parametro={match.params.id} />
+      <Header parametro={match.params.id} />
 
       <S.Form>
         <S.TypeIcons>
