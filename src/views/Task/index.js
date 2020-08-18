@@ -3,6 +3,8 @@ import { Redirect } from "react-router-dom";
 import * as S from "./styles";
 
 import api from "../../services/api";
+
+import * as server from "../../services/apiservices";
 import { format } from "date-fns";
 
 //components
@@ -31,10 +33,12 @@ export default function Task({ match }) {
     });
   }
 
-  useEffect(() => {
-    lateVerify();
-    LoadTaskDetails();
-  }, []);
+  async function remove() {
+    await api.delete(`/task/${match.params.id}`).then((r) => {
+      console.log(r.data);
+      setRedirect(true);
+    });
+  }
 
   async function LoadTaskDetails() {
     await api.get(`/task/${match.params.id}`).then((r) => {
@@ -87,7 +91,10 @@ export default function Task({ match }) {
         });
     }
   };
-
+  useEffect(() => {
+    lateVerify();
+    LoadTaskDetails();
+  }, []);
   return (
     <S.Container>
       {redirect && <Redirect to="/" />}
@@ -158,7 +165,12 @@ export default function Task({ match }) {
             />
             <span>CONCLUIDO</span>
           </div>
-          <button type="button">EXCLUIR</button>
+
+          {match.params.id && (
+            <button type="button" onClick={remove}>
+              EXCLUIR
+            </button>
+          )}
         </S.Options>
 
         <S.Save>
