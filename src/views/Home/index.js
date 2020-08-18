@@ -11,7 +11,7 @@ import FilterCard from "./../../components/FilterCard";
 import TaskCard from "./../../components/TaskCard/index";
 
 export default function Home() {
-  const [filterActived, setFilterActived] = useState("today");
+  const [filterActived, setFilterActived] = useState("all");
   const [tasks, setTasks] = useState([]);
   const [lateCount, setLateCount] = useState();
 
