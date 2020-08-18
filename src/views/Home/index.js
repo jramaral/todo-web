@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import * as S from "./styles";
 
 import api from "../../services/api";
@@ -63,11 +64,11 @@ export default function Home() {
         <h3>{filterActived === "late" ? "TAREFAS ATRASADAS" : "TAREFAS"}</h3>
       </S.Title>
       <S.Content>
-        {tasks.map((t) => {
-          return (
-            <TaskCard type={t.type} title={t.title} when={t.when} key={t._id} />
-          );
-        })}
+        {tasks.map((t) => (
+          <Link to={`/task/${t._id}`} key={t._id}>
+            <TaskCard type={t.type} title={t.title} when={t.when} />
+          </Link>
+        ))}
       </S.Content>
       <Footer />
     </S.Container>

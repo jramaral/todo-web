@@ -10,6 +10,7 @@ export default function Routes() {
       <Switch>
         <Route path="/" component={Home} exact />
         <Route path="/task" component={Task} exact />
+        <Route path="/task/:id" component={Task} exact />
 
         <Route component={Pagina404} />
       </Switch>

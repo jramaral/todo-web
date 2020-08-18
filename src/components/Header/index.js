@@ -4,7 +4,8 @@ import * as S from "./styles";
 import logo from "../../assets/logo.png";
 import bell from "../../assets/bell.png";
 
-export default function Header({ lateCount, clickNotification }) {
+export default function Header({ lateCount, clickNotification, parametro }) {
+  console.log(parametro);
   return (
     <S.Container>
       <S.LeftSide>
@@ -16,8 +17,14 @@ export default function Header({ lateCount, clickNotification }) {
         <span className="dividir" />
         <Link to="/">INICIO</Link>
         <span className="dividir" />
-        <Link to="/task">NOVA TAREFA</Link>
-        <span className="dividir" />
+
+        {parametro === undefined && (
+          <>
+            {" "}
+            <Link to="/task">NOVA TAREFA</Link> <span className="dividir" />
+          </>
+        )}
+
         <Link to="/qrcode">SINCRONIZAR CELULAR</Link>
         <span className="dividir" />
         <button onClick={clickNotification} id="notification">
