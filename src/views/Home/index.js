@@ -66,7 +66,12 @@ export default function Home() {
       <S.Content>
         {tasks.map((t) => (
           <Link to={`/task/${t._id}`} key={t._id}>
-            <TaskCard type={t.type} title={t.title} when={t.when} />
+            <TaskCard
+              type={t.type}
+              title={t.title}
+              when={t.when}
+              done={t.done}
+            />
           </Link>
         ))}
       </S.Content>

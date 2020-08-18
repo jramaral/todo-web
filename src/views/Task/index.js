@@ -48,6 +48,17 @@ export default function Task({ match }) {
   }
 
   const Save = async () => {
+    //validação dos dados
+    if (!title) {
+      return alert("você precisa informar o titulo");
+    } else if (!description) {
+      return alert("você precisa informar a descrição");
+    } else if (!date) {
+      return alert("você precisa informar a data");
+    } else if (!hour) {
+      return alert("você precisa informar a hora");
+    }
+
     if (match.params.id) {
       await api
         .put(`/task/${match.params.id}`, {

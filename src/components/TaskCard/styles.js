@@ -15,6 +15,10 @@ export const Container = styled.div`
   cursor: pointer;
   transition: all 0.3s ease;
 
+  opacity: ${(props) => (props.done ? 0.5 : 1)};
+  text-decoration: ${(props) =>
+    props.done ? "line-through" : "text-decoration: none;"};
+
   &:hover {
     opacity: 0.5;
   }
