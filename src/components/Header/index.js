@@ -5,20 +5,32 @@ import logo from "../../assets/logo.png";
 import bell from "../../assets/bell.png";
 
 import api from "../../services/api";
+
+import isConnected from "./../../utils/connected";
+
 export default function Header({ clickNotification, parametro }) {
   const [lateCount, setLateCount] = useState();
+  const [sincronizado, setSincronizado] = useState(false);
+  const [tolink, setToLink] = useState("#");
 
   async function lateVerify() {
-    await api.get(`/task/filter/late/11:11:11:11:11:11`).then((response) => {
+    await api.get(`/task/filter/late/${isConnected}`).then((response) => {
       setLateCount(response.data.length);
     });
   }
 
   useEffect(() => {
+    if (isConnected) {
+      setSincronizado(true);
+    }
     lateVerify();
   }, []);
 
-  console.log(parametro);
+  const Logout = async () => {
+    await localStorage.removeItem("@todo/macaddress");
+    window.location.reload();
+  };
+
   return (
     <S.Container>
       <S.LeftSide>
@@ -38,7 +50,14 @@ export default function Header({ clickNotification, parametro }) {
           </>
         )}
 
-        <Link to="/qrcode">SINCRONIZAR CELULAR</Link>
+        {sincronizado ? (
+          <button type="button" onClick={Logout}>
+            SAIR
+          </button>
+        ) : (
+          <Link to="/qrcode">SINCRONIZAR CELULAR</Link>
+        )}
+
         <span className="dividir" />
         {lateCount > 0 && (
           <button onClick={clickNotification} id="notification">

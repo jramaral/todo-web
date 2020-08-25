@@ -67,4 +67,18 @@ export const RightSide = styled.div`
     margin: 0 10px;
     color: #fff;
   }
+
+  button {
+    font-size: 16px;
+    font-weight: bold;
+    color: #fff;
+    background: none;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    &:hover {
+      color: #e5791b;
+      transform: scale(1.1);
+    }
+  }
 `;

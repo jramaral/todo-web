@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import * as S from "./styles";
 
 import api from "../../services/api";
@@ -9,14 +9,16 @@ import Header from "../../components/Header";
 import Footer from "./../../components/Footer";
 import FilterCard from "./../../components/FilterCard";
 import TaskCard from "./../../components/TaskCard/index";
+import isConnected from "../../utils/connected";
 
 export default function Home() {
   const [filterActived, setFilterActived] = useState("all");
   const [tasks, setTasks] = useState([]);
+  const [redirect, setRedirect] = useState(false);
 
   async function loadTasks() {
     await api
-      .get(`/task/filter/${filterActived}/11:11:11:11:11:11`)
+      .get(`/task/filter/${filterActived}/${isConnected}`)
       .then((response) => {
         setTasks(response.data);
         console.log(response.data);
@@ -30,10 +32,15 @@ export default function Home() {
 
   useEffect(() => {
     loadTasks();
+
+    if (!isConnected) {
+      setRedirect(true);
+    }
   }, [filterActived]);
 
   return (
     <S.Container>
+      {redirect && <Redirect to="/qrcode" />}
       <Header clickNotification={Notification} />
       <S.FilterArea>
         <button type="button" onClick={() => setFilterActived("all")}>

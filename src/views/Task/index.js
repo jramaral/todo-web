@@ -4,7 +4,6 @@ import * as S from "./styles";
 
 import api from "../../services/api";
 
-import * as server from "../../services/apiservices";
 import { format } from "date-fns";
 
 //components
@@ -14,6 +13,7 @@ import typeIcons from "./../../utils/typeIcons";
 
 import iconClock from "../../assets/time.png";
 import iconCalendar from "../../assets/calendart.png";
+import isConnected from "../../utils/connected";
 
 export default function Task({ match }) {
   const [type, setType] = useState();
@@ -23,7 +23,7 @@ export default function Task({ match }) {
   const [description, setDescription] = useState();
   const [date, setDate] = useState();
   const [hour, setHour] = useState();
-  const [macaddress, setMacaddress] = useState("11:11:11:11:11:11");
+  const [macaddress, setMacaddress] = useState(isConnected);
   const [redirect, setRedirect] = useState(false);
 
   async function remove() {
@@ -34,14 +34,16 @@ export default function Task({ match }) {
   }
 
   async function LoadTaskDetails() {
-    await api.get(`/task/${match.params.id}`).then((r) => {
-      setType(r.data.type);
-      setTitle(r.data.title);
-      setDescription(r.data.description);
-      setDate(format(new Date(r.data.when), "yyyy-MM-dd"));
-      setHour(format(new Date(r.data.when), "HH:mm"));
-      setDone(r.data.done);
-    });
+    if (Boolean(match.params.id)) {
+      await api.get(`/task/${match.params.id}`).then((r) => {
+        setType(r.data.type);
+        setTitle(r.data.title);
+        setDescription(r.data.description);
+        setDate(format(new Date(r.data.when), "yyyy-MM-dd"));
+        setHour(format(new Date(r.data.when), "HH:mm"));
+        setDone(r.data.done);
+      });
+    }
   }
 
   const Save = async () => {
@@ -59,7 +61,7 @@ export default function Task({ match }) {
     if (match.params.id) {
       await api
         .put(`/task/${match.params.id}`, {
-          macaddress,
+          macaddress: isConnected,
           type,
           title,
           description,
@@ -72,7 +74,7 @@ export default function Task({ match }) {
     } else {
       await api
         .post("/task", {
-          macaddress,
+          macaddress: isConnected,
           type,
           title,
           description,
@@ -85,6 +87,10 @@ export default function Task({ match }) {
     }
   };
   useEffect(() => {
+    if (!isConnected) {
+      setRedirect(true);
+    }
+
     LoadTaskDetails();
   }, []);
   return (
@@ -97,7 +103,11 @@ export default function Task({ match }) {
           {typeIcons.map(
             (icon, index) =>
               index > 0 && (
-                <button type="button" onClick={() => setType(index)}>
+                <button
+                  type="button"
+                  onClick={() => setType(index)}
+                  key={index}
+                >
                   <img
                     src={icon}
                     alt="Tipo da Tarefa"
@@ -112,7 +122,7 @@ export default function Task({ match }) {
           <span>Título</span>
           <input
             onChange={(e) => setTitle(e.target.value)}
-            value={title}
+            defaultValue={title}
             type="text"
             placeholder="Titulo da tarefa.."
           />
@@ -124,7 +134,7 @@ export default function Task({ match }) {
             rows={5}
             placeholder="Detalhes da tarefa"
             onChange={(e) => setDescription(e.target.value)}
-            value={description}
+            defaultValue={description}
           />
         </S.TextArea>
 
@@ -135,7 +145,7 @@ export default function Task({ match }) {
             type="date"
             placeholder="Descrição"
             onChange={(e) => setDate(e.target.value)}
-            value={date}
+            defaultValue={date}
           />
         </S.Input>
         <S.Input>
@@ -144,7 +154,7 @@ export default function Task({ match }) {
           <input
             type="time"
             onChange={(e) => setHour(e.target.value)}
-            value={hour}
+            defaultValue={hour}
           />
         </S.Input>
 
