@@ -1,5 +1,5 @@
 # todo-web
-projeto criado durante o curso na udemy, funciona em conjunto ao todo-mobile.
+
 ![](app.gif)
 
 
